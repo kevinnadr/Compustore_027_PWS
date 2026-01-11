@@ -12,7 +12,7 @@
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --sidebar-width: 280px;
+            --sidebar-width: 260px;
             --primary-color: #667eea;
             --text-dark: #2d3748;
             --bg-light: #f3f4f6;
@@ -43,7 +43,7 @@
         }
 
         .brand-logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--primary-color);
             margin-bottom: 40px;
@@ -66,138 +66,70 @@
             cursor: pointer;
         }
 
-        .nav-link-custom i {
-            width: 24px;
-            font-size: 1.1rem;
-            margin-right: 12px;
-        }
-
-        .nav-link-custom:hover {
-            background-color: #f7fafc;
-            color: var(--primary-color);
-        }
-
+        .nav-link-custom i { width: 24px; font-size: 1.1rem; margin-right: 12px; }
+        .nav-link-custom:hover { background-color: #f7fafc; color: var(--primary-color); }
         .nav-link-custom.active {
             background: var(--primary-gradient);
             color: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .sidebar-footer {
-            margin-top: auto;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 20px;
-        }
+        .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding-top: 20px; }
 
         /* --- MAIN CONTENT --- */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 40px;
-            min-height: 100vh;
-        }
-
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .page-title {
-            font-weight: 700;
-            font-size: 1.75rem;
-            margin-bottom: 5px;
-        }
+        .main-content { margin-left: var(--sidebar-width); padding: 40px; min-height: 100vh; }
+        .header-section { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .page-title { font-weight: 700; font-size: 1.75rem; margin-bottom: 5px; }
 
         /* --- CARDS & TABLES --- */
         .card-custom {
-            background: white;
-            border: none;
-            border-radius: var(--card-radius);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            padding: 25px;
-            height: 100%;
+            background: white; border: none; border-radius: var(--card-radius);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); padding: 25px; height: 100%;
         }
 
         .table-custom thead th {
-            background: #f8fafc;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #64748b;
-            padding: 15px;
-            border-bottom: 2px solid #edf2f7;
+            background: #f8fafc; font-size: 0.85rem; text-transform: uppercase;
+            color: #64748b; padding: 15px; border-bottom: 2px solid #edf2f7;
         }
-        
-        .table-custom tbody td {
-            vertical-align: middle;
-            padding: 15px;
-            border-bottom: 1px solid #f1f5f9;
-        }
+        .table-custom tbody td { vertical-align: middle; padding: 15px; border-bottom: 1px solid #f1f5f9; }
 
         /* Buttons & Badges */
         .btn-gradient {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: 0.3s;
+            background: var(--primary-gradient); color: white; border: none;
+            padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.3s;
         }
         .btn-gradient:hover { transform: translateY(-2px); color: white; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
 
         .btn-icon {
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            display: inline-flex; align-items: center; justify-content: center;
-            border: none; transition: 0.2s;
-            margin-left: 5px;
+            width: 32px; height: 32px; border-radius: 8px; border: none; margin-left: 5px;
+            display: inline-flex; align-items: center; justify-content: center; transition: 0.2s;
         }
-        .btn-edit { background: #fff7ed; color: #f97316; }
-        .btn-edit:hover { background: #f97316; color: white; }
-        .btn-delete { background: #fef2f2; color: #ef4444; }
-        .btn-delete:hover { background: #ef4444; color: white; }
+        .btn-edit { background: #fff7ed; color: #f97316; } .btn-edit:hover { background: #f97316; color: white; }
+        .btn-delete { background: #fef2f2; color: #ef4444; } .btn-delete:hover { background: #ef4444; color: white; }
 
-        /* Order List Style */
-        .order-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            background: white;
-            transition: 0.2s;
-        }
-        .order-card:hover { border-color: var(--primary-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-
-        /* Responsive */
-        @media (max-width: 991px) {
-            .sidebar { left: -100%; }
-            .sidebar.active { left: 0; }
-            .main-content { margin-left: 0; }
-            .mobile-toggle { display: block !important; }
-        }
-        
+        /* Mobile */
         .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-dark); }
         .section-view { display: none; animation: fadeIn 0.3s ease; }
         .section-view.active { display: block; }
-
+        
+        @media (max-width: 991px) {
+            .sidebar { left: -100%; } .sidebar.active { left: 0; }
+            .main-content { margin-left: 0; } .mobile-toggle { display: block !important; }
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <nav class="sidebar" id="sidebar">
-        <div class="brand-logo">
-            <i class="fas fa-cube"></i> CompuStore
-        </div>
+        <div class="brand-logo"><i class="fas fa-cube"></i> CompuStore</div>
         
         <div class="d-flex flex-column gap-2">
             <div class="nav-link-custom active" onclick="switchSection('products', this)">
                 <i class="fas fa-box-open"></i> Produk
             </div>
             <div class="nav-link-custom" onclick="switchSection('users', this)">
-                <i class="fas fa-users"></i> Manajemen User
+                <i class="fas fa-users"></i> User Manager
             </div>
             <div class="nav-link-custom" onclick="switchSection('orders', this)">
                 <i class="fas fa-shopping-bag"></i> Riwayat Order
@@ -212,7 +144,6 @@
     </nav>
 
     <div class="main-content">
-        
         <div class="d-flex align-items-center mb-4 d-lg-none">
             <i class="fas fa-bars mobile-toggle me-3" onclick="toggleSidebar()"></i>
             <h4 class="m-0 fw-bold">Admin Panel</h4>
@@ -232,26 +163,26 @@
                         <h5 class="fw-bold mb-4"><i class="fas fa-plus-circle text-primary me-2"></i>Tambah Baru</h5>
                         <form id="productForm">
                             <div class="mb-3">
-                                <label class="form-label">Nama Barang</label>
+                                <label class="form-label small fw-bold">Nama Barang</label>
                                 <input type="text" id="nama" class="form-control" placeholder="Nama Produk" required>
                             </div>
                             <div class="row">
                                 <div class="col-6 mb-3">
-                                    <label class="form-label">Harga</label>
+                                    <label class="form-label small fw-bold">Harga</label>
                                     <input type="number" id="harga" class="form-control" placeholder="Rp" required>
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label class="form-label">Stok</label>
+                                    <label class="form-label small fw-bold">Stok</label>
                                     <input type="number" id="stok" class="form-control" placeholder="Qty" required>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Foto Produk</label>
+                                <label class="form-label small fw-bold">Foto Produk</label>
                                 <input type="file" id="gambar" class="form-control" accept="image/*">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea id="deskripsi" class="form-control" rows="3" placeholder="Deskripsi singkat..."></textarea>
+                                <label class="form-label small fw-bold">Deskripsi</label>
+                                <textarea id="deskripsi" class="form-control" rows="3"></textarea>
                             </div>
                             <button type="submit" class="btn btn-gradient w-100">Simpan Produk</button>
                         </form>
@@ -287,7 +218,7 @@
             <div class="header-section">
                 <div>
                     <h2 class="page-title">Manajemen User</h2>
-                    <p class="text-muted mb-0">Kelola akun pengguna dan akses API Key.</p>
+                    <p class="text-muted mb-0">Kelola akun pengguna, role, dan data profil.</p>
                 </div>
                 <button class="btn btn-gradient" onclick="prepareAddUser()">
                     <i class="fas fa-user-plus me-2"></i> Tambah User
@@ -299,8 +230,9 @@
                     <table class="table table-custom">
                         <thead>
                             <tr>
-                                <th>Username</th>
-                                <th>Password</th>
+                                <th>Nama & Email</th>
+                                <th>No HP</th>
+                                <th>Role</th>
                                 <th>Status API</th>
                                 <th class="text-end">Aksi</th>
                             </tr>
@@ -316,10 +248,9 @@
             <div class="header-section">
                 <div>
                     <h2 class="page-title">Riwayat Pesanan</h2>
-                    <p class="text-muted mb-0">Pantau pesanan masuk dan ubah status pengiriman.</p>
+                    <p class="text-muted mb-0">Pantau dan update status pesanan masuk.</p>
                 </div>
             </div>
-
             <div class="card-custom">
                 <div id="ordersList" style="max-height: 700px; overflow-y: auto;">
                     </div>
@@ -332,39 +263,24 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-white">Edit Produk</h5>
+                    <h5 class="modal-title">Edit Produk</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editProductForm">
                         <input type="hidden" id="editId">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Barang</label>
-                            <input type="text" id="editNama" class="form-control" required>
-                        </div>
+                        <div class="mb-3"><label>Nama</label><input type="text" id="editNama" class="form-control"></div>
                         <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label">Harga</label>
-                                <input type="number" id="editHarga" class="form-control" required>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label">Stok</label>
-                                <input type="number" id="editStok" class="form-control" required>
-                            </div>
+                            <div class="col-6 mb-3"><label>Harga</label><input type="number" id="editHarga" class="form-control"></div>
+                            <div class="col-6 mb-3"><label>Stok</label><input type="number" id="editStok" class="form-control"></div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Update Foto (Opsional)</label>
-                            <input type="file" id="editGambar" class="form-control" accept="image/*">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Deskripsi</label>
-                            <textarea id="editDeskripsi" class="form-control" rows="3"></textarea>
-                        </div>
+                        <div class="mb-3"><label>Foto Baru (Opsional)</label><input type="file" id="editGambar" class="form-control"></div>
+                        <div class="mb-3"><label>Deskripsi</label><textarea id="editDeskripsi" class="form-control"></textarea></div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-gradient" onclick="updateProduct()">Update</button>
+                    <button class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-gradient" onclick="updateProduct()">Simpan</button>
                 </div>
             </div>
         </div>
@@ -374,23 +290,40 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-white" id="userModalTitle">User</h5>
+                    <h5 class="modal-title" id="userModalTitle">Form User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="userId">
                     <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" id="userNameInput" class="form-control" required>
+                        <label class="form-label small fw-bold">Nama Lengkap</label>
+                        <input type="text" id="userNama" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="text" id="userPassInput" class="form-control" required>
+                        <label class="form-label small fw-bold">Email</label>
+                        <input type="email" id="userEmail" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Password</label>
+                            <input type="text" id="userPass" class="form-control" placeholder="(Kosongkan jika tetap)">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">No HP</label>
+                            <input type="text" id="userPhone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Role</label>
+                        <select id="userRole" class="form-select">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-gradient" onclick="saveUser()">Simpan</button>
+                    <button type="button" class="btn btn-gradient" onclick="saveUser()">Simpan Data</button>
                 </div>
             </div>
         </div>
@@ -398,73 +331,49 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- NAVIGATION LOGIC ---
-        function switchSection(sectionId, element) {
-            // Update Active Menu
-            document.querySelectorAll('.nav-link-custom').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-
-            // Show Target Section
-            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
-            document.getElementById('section-' + sectionId).classList.add('active');
-
-            // Mobile: Close sidebar after click
-            if(window.innerWidth < 992) {
-                document.getElementById('sidebar').classList.remove('active');
-            }
+        // Navigation
+        function switchSection(id, el) {
+            document.querySelectorAll('.nav-link-custom').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + id).classList.add('active');
+            if(window.innerWidth < 992) document.getElementById('sidebar').classList.remove('active');
         }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        // --- GLOBAL VARS & HELPERS ---
+        // Global Vars
         let globalProducts = [];
         const userModal = new bootstrap.Modal(document.getElementById('userModal'));
         const productModal = new bootstrap.Modal(document.getElementById('editProductModal'));
-        const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        const formatRupiah = (n) => new Intl.NumberFormat('id-ID', {style:'currency', currency:'IDR', minimumFractionDigits:0}).format(n);
 
-        // === DATA LOADING ===
+        // Load Data
         async function loadAdminData() {
             try {
                 const res = await fetch('/api/admin/data');
                 if (res.status === 403) return window.location.href = 'index.html';
                 const data = await res.json();
-
-                // Products
+                
                 globalProducts = data.products;
                 document.getElementById('productCountBadge').innerText = data.products.length + ' Item';
                 renderProducts(data.products);
-
-                // Users
                 renderUsers(data.users);
-
-                // Orders
                 loadOrders();
-
-            } catch (error) { console.error(error); }
+            } catch (e) { console.error(e); }
         }
 
+        // Render Tables
         function renderProducts(products) {
             const list = document.getElementById('productList');
             list.innerHTML = '';
-            if(products.length === 0) list.innerHTML = '<tr><td colspan="4" class="text-center py-4">Kosong</td></tr>';
-
+            if(!products.length) list.innerHTML = '<tr><td colspan="4" class="text-center py-4">Kosong</td></tr>';
             products.forEach((p, i) => {
-                const img = p.gambar ? `<img src="${p.gambar}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;">` : '<i class="fas fa-image text-muted"></i>';
-                
+                const img = p.gambar ? `<img src="${p.gambar}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">` : '<i class="fas fa-image text-muted"></i>';
                 list.innerHTML += `
                 <tr>
-                    <td>
-                        <div class="d-flex align-items-center gap-3">
-                            <div style="width:40px; height:40px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; border-radius:6px;">${img}</div>
-                            <div>
-                                <div class="fw-bold text-dark">${p.nama_barang}</div>
-                            </div>
-                        </div>
-                    </td>
+                    <td><div class="d-flex align-items-center gap-3"><div>${img}</div><div class="fw-bold text-dark">${p.nama_barang}</div></div></td>
                     <td>${formatRupiah(p.harga)}</td>
-                    <td><span class="badge ${p.stok > 0 ? 'bg-success' : 'bg-danger'} bg-opacity-10 text-${p.stok > 0 ? 'success' : 'danger'}">${p.stok} Unit</span></td>
+                    <td><span class="badge ${p.stok>0?'bg-success':'bg-danger'} bg-opacity-10 text-${p.stok>0?'success':'danger'}">${p.stok} Unit</span></td>
                     <td class="text-end">
                         <button class="btn-icon btn-edit" onclick="prepareEditProduct(${i})"><i class="fas fa-pen"></i></button>
                         <button class="btn-icon btn-delete" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
@@ -476,24 +385,17 @@
         function renderUsers(users) {
             const list = document.getElementById('userList');
             list.innerHTML = '';
-            
             users.forEach(u => {
-                const status = u.api_key 
-                    ? `<span class="badge bg-success bg-opacity-10 text-success">Active</span>` 
-                    : `<span class="badge bg-secondary bg-opacity-10 text-secondary">Inactive</span>`;
-                
+                const apiKeyStatus = u.api_key ? '<span class="badge bg-success bg-opacity-10 text-success">Active</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary">None</span>';
+                const roleBadge = u.role === 'admin' ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-info text-dark">User</span>';
                 list.innerHTML += `
                 <tr>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="bg-light rounded-circle p-2 text-primary"><i class="fas fa-user"></i></div>
-                            <span class="fw-medium">${u.username}</span>
-                        </div>
-                    </td>
-                    <td><code class="text-muted bg-light px-2 rounded">${u.password}</code></td>
-                    <td>${status}</td>
+                    <td><div class="fw-bold">${u.nama}</div><div class="small text-muted">${u.email}</div></td>
+                    <td>${u.no_hp}</td>
+                    <td>${roleBadge}</td>
+                    <td>${apiKeyStatus}</td>
                     <td class="text-end">
-                        <button class="btn-icon btn-edit" onclick="prepareEditUser(${u.id}, '${u.username}', '${u.password}')"><i class="fas fa-pen"></i></button>
+                        <button class="btn-icon btn-edit" onclick="prepareEditUser(${u.id}, '${u.nama}', '${u.email}', '${u.no_hp}', '${u.role}')"><i class="fas fa-pen"></i></button>
                         <button class="btn-icon btn-delete" onclick="deleteUser(${u.id})"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>`;
@@ -506,58 +408,31 @@
                 const orders = await res.json();
                 const list = document.getElementById('ordersList');
                 list.innerHTML = '';
-
-                if (!orders || orders.length === 0) {
-                    list.innerHTML = '<div class="text-center py-5 text-muted"><i class="fas fa-inbox fa-2x mb-2"></i><p>Belum ada order</p></div>';
-                    return;
-                }
-
+                if(!orders.length) { list.innerHTML = '<div class="text-center py-5 text-muted">Belum ada order</div>'; return; }
+                
                 orders.forEach(o => {
-                    let badge = '';
-                    let btns = '';
-
-                    if(o.status === 'pending') {
-                        badge = '<span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> Menunggu</span>';
-                        btns = `<button class="btn btn-sm btn-primary me-2" onclick="updateStatus(${o.id}, 'send')">Kirim</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="updateStatus(${o.id}, 'cancel')">Tolak</button>`;
-                    } else if(o.status === 'send') {
-                        badge = '<span class="badge bg-primary"><i class="fas fa-truck"></i> Dikirim</span>';
-                        btns = `<button class="btn btn-sm btn-link text-danger text-decoration-none" onclick="updateStatus(${o.id}, 'cancel')">Batalkan?</button>`;
-                    } else {
-                        badge = '<span class="badge bg-danger">Batal</span>';
-                        btns = '<span class="text-muted small">Selesai</span>';
-                    }
-
-                    // Parse Items
-                    let itemsStr = '';
-                    try {
-                        const items = JSON.parse(o.items);
-                        itemsStr = items.map(i => `${i.nama} (x${i.quantity})`).join(', ');
-                    } catch(e) { itemsStr = o.items; }
-
+                    let badge = o.status==='pending' ? 'bg-warning' : (o.status==='send' ? 'bg-primary' : 'bg-danger');
+                    let btns = o.status==='pending' ? 
+                        `<button class="btn btn-sm btn-primary me-2" onclick="updateStatus(${o.id}, 'send')">Kirim</button><button class="btn btn-sm btn-outline-danger" onclick="updateStatus(${o.id}, 'cancel')">Tolak</button>` : 
+                        (o.status==='send' ? `<button class="btn btn-sm btn-link text-danger text-decoration-none" onclick="updateStatus(${o.id}, 'cancel')">Batalkan?</button>` : '');
+                    
                     list.innerHTML += `
-                    <div class="order-card">
-                        <div class="d-flex justify-content-between mb-2">
+                    <div class="card border mb-3 p-3">
+                        <div class="d-flex justify-content-between">
                             <span class="fw-bold">#ORD-${o.id}</span>
-                            ${badge}
+                            <span class="badge ${badge}">${o.status}</span>
                         </div>
-                        <div class="small text-muted mb-2">
-                            <i class="fas fa-user me-1"></i> ${o.customer_name} | <i class="fas fa-phone me-1"></i> ${o.phone}
-                        </div>
-                        <div class="bg-light p-2 rounded mb-3 small">
-                            <div><strong>Items:</strong> ${itemsStr}</div>
-                            <div class="mt-1"><strong>Alamat:</strong> ${o.city}, ${o.province}</div>
-                            <div class="mt-1 text-primary fw-bold">Total: ${formatRupiah(o.total_amount)} (${o.payment_method.toUpperCase()})</div>
-                        </div>
+                        <div class="small text-muted mb-2">${o.customer_name} • ${o.phone}</div>
+                        <div class="bg-light p-2 rounded mb-2 small">Total: ${formatRupiah(o.total_amount)}</div>
                         <div class="text-end">${btns}</div>
                     </div>`;
                 });
-            } catch (e) { console.error(e); }
+            } catch(e) {}
         }
 
-        // --- CRUD ACTIONS ---
+        // --- CRUD Logic ---
         
-        // Products
+        // Product
         document.getElementById('productForm').onsubmit = async (e) => {
             e.preventDefault();
             const fd = new FormData();
@@ -565,12 +440,9 @@
             fd.append('harga', document.getElementById('harga').value);
             fd.append('stok', document.getElementById('stok').value);
             fd.append('deskripsi', document.getElementById('deskripsi').value);
-            const file = document.getElementById('gambar').files[0];
-            if(file) fd.append('gambar', file);
-
-            await fetch('/api/admin/product', { method: 'POST', body: fd });
-            document.getElementById('productForm').reset();
-            loadAdminData();
+            if(document.getElementById('gambar').files[0]) fd.append('gambar', document.getElementById('gambar').files[0]);
+            await fetch('/api/admin/product', { method:'POST', body:fd });
+            document.getElementById('productForm').reset(); loadAdminData();
         };
 
         function prepareEditProduct(i) {
@@ -580,7 +452,6 @@
             document.getElementById('editHarga').value = p.harga;
             document.getElementById('editStok').value = p.stok;
             document.getElementById('editDeskripsi').value = p.deskripsi;
-            document.getElementById('editGambar').value = '';
             productModal.show();
         }
 
@@ -591,74 +462,70 @@
             fd.append('harga', document.getElementById('editHarga').value);
             fd.append('stok', document.getElementById('editStok').value);
             fd.append('deskripsi', document.getElementById('editDeskripsi').value);
-            const file = document.getElementById('editGambar').files[0];
-            if(file) fd.append('gambar', file);
-
-            const res = await fetch(`/api/admin/product/${id}`, { method: 'PUT', body: fd });
-            const data = await res.json();
-            if(data.success) { productModal.hide(); loadAdminData(); }
+            if(document.getElementById('editGambar').files[0]) fd.append('gambar', document.getElementById('editGambar').files[0]);
+            await fetch(`/api/admin/product/${id}`, { method:'PUT', body:fd });
+            productModal.hide(); loadAdminData();
         }
 
         async function deleteProduct(id) {
-            if(confirm('Hapus?')) {
-                await fetch(`/api/admin/product/${id}`, { method: 'DELETE' });
-                loadAdminData();
-            }
+            if(confirm('Hapus produk?')) { await fetch(`/api/admin/product/${id}`, { method:'DELETE' }); loadAdminData(); }
         }
 
-        // Users
+        // User
         let isEditUser = false;
         function prepareAddUser() {
             isEditUser = false;
             document.getElementById('userModalTitle').innerText = "Tambah User";
             document.getElementById('userId').value = '';
-            document.getElementById('userNameInput').value = '';
-            document.getElementById('userPassInput').value = '';
+            document.getElementById('userNama').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userPass').value = '';
+            document.getElementById('userPhone').value = '';
+            document.getElementById('userRole').value = 'user';
             userModal.show();
         }
-        function prepareEditUser(id, u, p) {
+
+        function prepareEditUser(id, nama, email, hp, role) {
             isEditUser = true;
             document.getElementById('userModalTitle').innerText = "Edit User";
             document.getElementById('userId').value = id;
-            document.getElementById('userNameInput').value = u;
-            document.getElementById('userPassInput').value = p;
+            document.getElementById('userNama').value = nama;
+            document.getElementById('userEmail').value = email;
+            document.getElementById('userPass').value = ''; 
+            document.getElementById('userPhone').value = hp;
+            document.getElementById('userRole').value = role;
             userModal.show();
         }
+
         async function saveUser() {
             const id = document.getElementById('userId').value;
-            const u = document.getElementById('userNameInput').value;
-            const p = document.getElementById('userPassInput').value;
-            
+            const body = {
+                nama: document.getElementById('userNama').value,
+                email: document.getElementById('userEmail').value,
+                no_hp: document.getElementById('userPhone').value,
+                role: document.getElementById('userRole').value,
+                password: document.getElementById('userPass').value
+            };
             const url = isEditUser ? `/api/admin/user/${id}` : '/api/admin/user';
             const method = isEditUser ? 'PUT' : 'POST';
-
-            const res = await fetch(url, {
-                method: method, headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username: u, password: p})
-            });
+            
+            const res = await fetch(url, { method:method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
             const data = await res.json();
-            if(data.success) { userModal.hide(); loadAdminData(); } 
-            else alert('Gagal');
-        }
-        async function deleteUser(id) {
-            if(confirm('Hapus user?')) {
-                await fetch(`/api/admin/user/${id}`, { method: 'DELETE' });
-                loadAdminData();
-            }
+            if(data.success) { userModal.hide(); loadAdminData(); } else alert(data.message);
         }
 
-        // Orders
+        async function deleteUser(id) {
+            if(confirm('Hapus user?')) { await fetch(`/api/admin/user/${id}`, { method:'DELETE' }); loadAdminData(); }
+        }
+
+        // Order
         async function updateStatus(id, status) {
             if(confirm('Update status?')) {
-                await fetch(`/api/admin/order/${id}/status`, {
-                    method: 'PUT', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({status})
-                });
+                await fetch(`/api/admin/order/${id}/status`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({status}) });
                 loadOrders();
             }
         }
 
-        // Init
         loadAdminData();
     </script>
 </body>

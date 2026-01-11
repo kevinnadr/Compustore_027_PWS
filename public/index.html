@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - CompuStore</title>
+    <title>Masuk - CompuStore</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,360 +14,238 @@
             --primary-color: #667eea;
             --secondary-color: #764ba2;
             --text-dark: #2d3748;
-            --text-muted: #718096;
-            --bg-input: #f8fafc;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
             font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
             background-color: #ffffff;
+            min-height: 100vh;
+            overflow: hidden; /* Mencegah scroll */
         }
 
-        /* --- Animasi Masuk --- */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0; /* Mulai invisible */
-        }
-        
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-
-        /* --- Layout Utama --- */
-        .login-container {
-            display: flex;
+        /* Layout Split */
+        .login-wrapper {
+            height: 100vh;
             width: 100%;
-            height: 100%;
         }
 
-        /* --- Sisi Kiri (Gambar) --- */
-        .login-left {
+        /* Bagian Kiri (Gambar) */
+        .banner-side {
+            background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
             position: relative;
-            width: 55%; /* Sedikit lebih lebar */
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 60px;
-            overflow: hidden;
+            justify-content: space-between;
+            padding: 40px;
+            color: white;
         }
 
-        .login-bg-image {
+        /* Overlay Gradient di atas gambar */
+        .banner-side::before {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('images/BackgroundLogin.jpg'); /* Pastikan path ini benar */
-            background-size: cover;
-            background-position: center;
-            opacity: 0.35;
-            mix-blend-mode: overlay;
-            transition: transform 10s ease;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.9) 100%);
+            z-index: 1;
         }
 
-        /* Efek zoom lambat pada background */
-        .login-left:hover .login-bg-image {
-            transform: scale(1.05);
-        }
-        
-        .login-left-content {
+        .banner-content {
             position: relative;
             z-index: 2;
-            max-width: 600px;
-            color: white;
-            /* Efek Glassmorphism halus di belakang teks */
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
-        .login-left h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            letter-spacing: -0.5px;
-        }
-        
-        .login-left p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            line-height: 1.6;
-            font-weight: 300;
-        }
-
-        /* --- Sisi Kanan (Form) --- */
-        .login-right {
-            width: 45%;
-            height: 100%;
-            background: white;
+        /* Bagian Kanan (Form) */
+        .form-side {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 0 8%;
-            position: relative;
+            background-color: #ffffff;
+            padding: 40px;
         }
 
-        /* Navbar */
-        .top-nav {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            display: flex;
-            gap: 20px;
-            z-index: 10;
-        }
-
-        .top-nav a {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 15px;
-            transition: color 0.3s ease;
-            padding: 8px 16px;
-            border-radius: 20px;
-        }
-
-        .top-nav a.active, .top-nav a:hover {
-            color: var(--primary-color);
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        /* Form Wrapper */
-        .login-form-wrapper {
+        .login-box {
             width: 100%;
             max-width: 420px;
-            margin: 0 auto;
+            animation: fadeUp 0.8s ease;
         }
 
-        .login-right h2 {
-            color: var(--text-dark);
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .login-right .subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 40px;
+        /* Custom Input Modern */
+        .form-floating > .form-control {
+            border: 2px solid #f3f4f6;
+            background-color: #f9fafb;
+            border-radius: 12px;
+            height: 55px;
         }
 
-        .form-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            display: block;
+        .form-floating > .form-control:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
-        .input-group-text {
-            background: transparent;
-            border: none;
-            position: absolute;
-            left: 15px;
-            top: 45px; /* Sesuaikan posisi icon */
-            z-index: 4;
+        .form-floating > label {
+            padding-left: 15px;
             color: #a0aec0;
         }
-        
-        .form-control {
-            height: 50px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
-            padding-left: 15px; /* Ruang untuk text */
-            background-color: var(--bg-input);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-dark);
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-color);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
 
-        .form-control::placeholder {
-            color: #cbd5e0;
-        }
-
+        /* Tombol Modern */
         .btn-login {
-            height: 52px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
             width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px -1px rgba(102, 126, 234, 0.5);
+            font-size: 1rem;
             letter-spacing: 0.5px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.4);
         }
-        
+
         .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(102, 126, 234, 0.6);
-            filter: brightness(1.1);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -5px rgba(102, 126, 234, 0.6);
+            color: white;
         }
 
-        .login-footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-        
-        .login-footer a {
+        .btn-login:active { transform: scale(0.98); }
+
+        .brand-text {
+            font-weight: 800;
+            letter-spacing: -1px;
             color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-        
-        .login-footer a:hover {
-            color: var(--secondary-color);
-            text-decoration: underline;
         }
 
-        /* Checkbox & Link */
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+        /* Animasi Masuk */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsif */
-        @media (max-width: 992px) {
-            .login-left { display: none; }
-            .login-right { width: 100%; padding: 40px; }
-            .top-nav { justify-content: center; top: 20px; right: 0; width: 100%; }
+        /* Responsive Mobile */
+        @media (max-width: 991px) {
+            .banner-side { display: none; }
+            .form-side { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+            .login-box {
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            }
         }
     </style>
 </head>
 <body>
-    
-    <div class="login-container">
-        <div class="login-left">
-            <div class="login-bg-image"></div>
+
+    <div class="container-fluid g-0">
+        <div class="row g-0 login-wrapper">
             
-            <div class="login-left-content animate-in">
-                <h1>CompuStore</h1>
-                <p>Temukan teknologi masa depan di ujung jari Anda. Bergabunglah dengan ribuan pelanggan yang telah mempercayai kami.</p>
-            </div>
-        </div>
-        
-        <div class="login-right">
-            <nav class="top-nav animate-in delay-1">
-                <a href="index.html" class="active">Login</a>
-                <a href="register.html">Register</a>
-                <a href="docs.html">Docs</a>
-            </nav>
-
-            <div class="login-form-wrapper animate-in delay-2">
-                <h2>Selamat Datang!</h2>
-                <p class="subtitle">Masuk untuk mengelola pesanan Anda.</p>
-                
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label class="form-label">Username</label>
-                        <input type="text" id="username" class="form-control" placeholder="contoh: user123" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rememberMe">
-                            <label class="form-check-label small text-muted" for="rememberMe">Ingat Saya</label>
-                        </div>
-                        <a href="#" class="small text-decoration-none" style="color: var(--primary-color); font-weight: 500;">Lupa Password?</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-login">
-                        Masuk Sekarang <i class="fas fa-arrow-right ms-2"></i>
-                    </button>
-                </form>
-                
-                <div class="login-footer animate-in delay-3">
-                    Belum punya akun? <a href="register.html">Buat Akun Baru</a>
+            <div class="col-lg-6 banner-side">
+                <div class="banner-content">
+                    <h3 class="fw-bold"><i class="fas fa-cube me-2"></i> CompuStore</h3>
+                </div>
+                <div class="banner-content mb-5">
+                    <h1 class="display-4 fw-bold mb-3">Upgrade Your<br>Digital Life.</h1>
+                    <p class="lead opacity-75">Temukan perangkat komputer dan gadget terbaik dengan harga kompetitif hanya di sini.</p>
+                </div>
+                <div class="banner-content">
+                    <small class="opacity-50">&copy; 2026 CompuStore Inc. All rights reserved.</small>
                 </div>
             </div>
+
+            <div class="col-lg-6 form-side">
+                <div class="login-box">
+                    <div class="text-center d-lg-none mb-4">
+                        <i class="fas fa-cube fa-3x text-primary mb-3"></i>
+                        <h2 class="fw-bold text-dark">CompuStore</h2>
+                    </div>
+
+                    <div class="mb-5">
+                        <h2 class="fw-bold text-dark mb-2">Selamat Datang Kembali! 👋</h2>
+                        <p class="text-muted">Silakan masukkan detail akun Anda untuk login.</p>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                            <label for="email">Alamat Email</label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                            <label for="password">Kata Sandi</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="remember">
+                                <label class="form-check-label text-muted small" for="remember">Ingat Saya</label>
+                            </div>
+                            <a href="#" class="text-decoration-none small fw-bold" style="color: var(--primary-color);">Lupa Password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-login">
+                            Masuk Sekarang <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted small">Belum punya akun? 
+                                <a href="register.html" class="text-decoration-none fw-bold" style="color: var(--primary-color);">Daftar di sini</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        document.getElementById('loginForm').onsubmit = async (e) => {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.querySelector('.btn-login');
             const originalText = btn.innerHTML;
             
-            // Efek Loading pada tombol
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            // Loading State
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...'; 
             btn.disabled = true;
-            btn.style.opacity = '0.7';
 
-            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             try {
                 const res = await fetch('/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ email, password })
                 });
+
                 const data = await res.json();
                 
-                if (data.success) {
-                    window.location.href = data.redirect;
+                if(data.success) {
+                    // Animasi sukses sebentar sebelum redirect
+                    btn.innerHTML = '<i class="fas fa-check"></i> Berhasil!';
+                    btn.classList.remove('btn-login');
+                    btn.classList.add('btn-success');
+                    
+                    setTimeout(() => {
+                        if(data.role === 'admin') window.location.href = 'admin_dashboard.html';
+                        else window.location.href = 'user_dashboard.html';
+                    }, 800);
                 } else {
-                    alert(data.message);
-                    // Reset tombol jika gagal
-                    btn.innerHTML = originalText;
+                    alert(data.message || 'Login Gagal');
+                    btn.innerHTML = originalText; 
                     btn.disabled = false;
-                    btn.style.opacity = '1';
                 }
-            } catch (err) {
-                console.error(err);
-                alert("Terjadi kesalahan koneksi");
-                btn.innerHTML = originalText;
+            } catch (error) {
+                console.error(error);
+                alert('Terjadi kesalahan koneksi server');
+                btn.innerHTML = originalText; 
                 btn.disabled = false;
-                btn.style.opacity = '1';
             }
-        };
+        });
     </script>
 </body>
 </html>

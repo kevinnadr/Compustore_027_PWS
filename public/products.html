@@ -53,6 +53,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .nav-btn-custom:hover {
@@ -218,6 +219,29 @@
             cursor: not-allowed;
         }
 
+        /* Modal Styles */
+        .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+        .modal-header .btn-close { filter: brightness(0) invert(1); }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .bg-pending { background: #fff7ed; color: #f97316; }
+        .bg-send { background: #eff6ff; color: #3b82f6; }
+        .bg-cancel { background: #fef2f2; color: #ef4444; }
+
         /* Toast */
         .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
     </style>
@@ -230,15 +254,22 @@
                 <i class="fas fa-cube me-2"></i> CompuStore
             </a>
             <div class="ms-auto d-flex align-items-center gap-2">
-                <a href="cart.html" class="nav-btn-custom position-relative">
+                
+                <button onclick="openHistoryModal()" class="nav-btn-custom bg-transparent border-0 text-white">
+                    <i class="fas fa-history"></i> 
+                    <span class="d-none d-md-inline ms-1">Riwayat</span>
+                </button>
+
+                <a href="cart.html" class="nav-btn-custom position-relative text-decoration-none">
                     <i class="fas fa-shopping-bag"></i> 
-                    <span class="d-none d-md-inline">Keranjang</span>
+                    <span class="d-none d-md-inline ms-1">Keranjang</span>
                     <span id="cartCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light p-1" style="font-size: 0.6rem; display: none;">
                         0
                     </span>
                 </a>
-                <a href="user_dashboard.html" class="nav-btn-custom">
-                    <i class="fas fa-user-circle"></i> <span class="d-none d-md-inline">Dashboard</span>
+                
+                <a href="user_dashboard.html" class="nav-btn-custom text-decoration-none">
+                    <i class="fas fa-user-circle"></i> <span class="d-none d-md-inline ms-1">Akun</span>
                 </a>
             </div>
         </div>
@@ -254,7 +285,7 @@
                 <i class="fas fa-search search-icon"></i>
             </div>
             
-            <div class="d-flex justify-content-center gap-2 mt-3">
+            <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
                 <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="resetFilter()">Semua</button>
                 <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="searchByTerm('Laptop')">Laptop</button>
                 <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="searchByTerm('Monitor')">Monitor</button>
@@ -273,6 +304,37 @@
         </div>
     </div>
 
+    <div class="modal fade" id="historyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-history me-2"></i> Riwayat Pesanan Saya</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4 py-3">ID</th>
+                                    <th class="py-3">Barang</th>
+                                    <th class="py-3">Total</th>
+                                    <th class="py-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalHistoryBody">
+                                <tr><td colspan="4" class="text-center py-4">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-container">
         <div id="cartToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
@@ -286,22 +348,64 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- DATA DUMMY (Fallback jika Database Kosong) ---
+        // --- DATA DUMMY (Fallback) ---
         const dummyProducts = [
-            { id: 101, nama_barang: "ASUS ROG Zephyrus G14", harga: 24500000, stok: 5, deskripsi: "Laptop gaming ultra-slim dengan prosesor AMD Ryzen 9 dan RTX 4060.", gambar: "https://placehold.co/600x400/1a1a1a/FFF?text=ROG+Zephyrus", category: "Laptop" },
-            { id: 102, nama_barang: "Logitech MX Master 3S", harga: 1650000, stok: 12, deskripsi: "Mouse produktivitas wireless terbaik dengan scroll wheel elektromagnetik.", gambar: "https://placehold.co/600x400/333/FFF?text=MX+Master+3S", category: "Aksesoris" },
-            { id: 103, nama_barang: "Keychron K2 Pro Mechanical", harga: 1850000, stok: 8, deskripsi: "Keyboard mekanikal wireless 75% QMK/VIA support, hot-swappable.", gambar: "https://placehold.co/600x400/e2e8f0/333?text=Keychron+K2", category: "Aksesoris" },
-            { id: 104, nama_barang: "LG UltraGear 27GN950", harga: 9200000, stok: 3, deskripsi: "Monitor Gaming 4K Nano IPS 144Hz 1ms response time.", gambar: "https://placehold.co/600x400/2d3748/FFF?text=LG+UltraGear", category: "Monitor" },
-            { id: 105, nama_barang: "NVIDIA RTX 4080 Super", harga: 19500000, stok: 0, deskripsi: "Kartu grafis high-end untuk gaming 4K rata kanan dan rendering.", gambar: "https://placehold.co/600x400/76e467/000?text=RTX+4080", category: "Komponen" },
-            { id: 106, nama_barang: "Samsung 990 Pro 2TB", harga: 3200000, stok: 20, deskripsi: "SSD NVMe M.2 Gen 4 super cepat, read speed up to 7450 MB/s.", gambar: "https://placehold.co/600x400/000/FFF?text=Samsung+990", category: "Storage" },
-            { id: 107, nama_barang: "MacBook Air M2 Midnight", harga: 18999000, stok: 7, deskripsi: "Laptop super tipis dan ringan dengan chip Apple M2 yang powerful.", gambar: "https://placehold.co/600x400/1e293b/FFF?text=MacBook+Air", category: "Laptop" },
-            { id: 108, nama_barang: "Sony WH-1000XM5", harga: 4999000, stok: 10, deskripsi: "Headphone noise cancelling terbaik di kelasnya dengan desain baru.", gambar: "https://placehold.co/600x400/f8fafc/333?text=Sony+XM5", category: "Audio" }
+            { id: 101, nama_barang: "ASUS ROG Zephyrus G14", harga: 24500000, stok: 5, deskripsi: "Laptop gaming ultra-slim.", gambar: "https://placehold.co/600x400/1a1a1a/FFF?text=ROG+Zephyrus", category: "Laptop" },
+            { id: 102, nama_barang: "Logitech MX Master 3S", harga: 1650000, stok: 12, deskripsi: "Mouse produktivitas wireless.", gambar: "https://placehold.co/600x400/333/FFF?text=MX+Master+3S", category: "Aksesoris" },
+            { id: 103, nama_barang: "LG UltraGear 27GN950", harga: 9200000, stok: 3, deskripsi: "Monitor Gaming 4K 144Hz.", gambar: "https://placehold.co/600x400/2d3748/FFF?text=LG+UltraGear", category: "Monitor" },
+            { id: 104, nama_barang: "Sony WH-1000XM5", harga: 4999000, stok: 8, deskripsi: "Headphone noise cancelling.", gambar: "https://placehold.co/600x400/f8fafc/333?text=Sony+XM5", category: "Audio" }
         ];
 
         let allProducts = [];
-
         const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
 
+        // --- FUNGSI MODAL RIWAYAT (BARU) ---
+        async function openHistoryModal() {
+            const myModal = new bootstrap.Modal(document.getElementById('historyModal'));
+            myModal.show();
+            
+            const tbody = document.getElementById('modalHistoryBody');
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div> Memuat...</td></tr>';
+
+            try {
+                const res = await fetch('/api/user/orders');
+                if(res.status === 401) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-danger">Silakan login terlebih dahulu.</td></tr>';
+                    return;
+                }
+                
+                const orders = await res.json();
+                
+                if(!orders || orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Belum ada riwayat pesanan.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                orders.forEach(o => {
+                    let badgeClass = 'bg-secondary';
+                    let statusLabel = o.status;
+                    if(o.status === 'pending') { badgeClass = 'bg-pending'; statusLabel = 'Menunggu'; }
+                    if(o.status === 'send') { badgeClass = 'bg-send'; statusLabel = 'Dikirim'; }
+                    if(o.status === 'cancel') { badgeClass = 'bg-cancel'; statusLabel = 'Batal'; }
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="ps-4 fw-bold">#${o.id}</td>
+                            <td><div class="text-truncate" style="max-width: 180px;">${o.items_preview || 'Produk'}</div></td>
+                            <td class="fw-bold" style="color:var(--primary-color)">${formatRupiah(o.total_amount)}</td>
+                            <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
+                        </tr>
+                    `;
+                });
+
+            } catch (error) {
+                console.error(error);
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-danger">Gagal memuat data.</td></tr>';
+            }
+        }
+
+        // --- FUNGSI EXISTING (CART & PRODUCT) ---
         function showToast() {
             const toastEl = document.getElementById('cartToast');
             toastEl.style.background = "linear-gradient(135deg, #10b981, #059669)";
@@ -312,7 +416,6 @@
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const count = cart.reduce((acc, item) => acc + item.quantity, 0);
-            
             const badge = document.getElementById('cartCountBadge');
             badge.innerText = count;
             badge.style.display = count > 0 ? 'block' : 'none';
@@ -321,12 +424,8 @@
         function addToCart(id, nama, harga) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const existing = cart.find(item => item.id === id);
-            
-            if (existing) {
-                existing.quantity += 1;
-            } else {
-                cart.push({ id, nama, harga, quantity: 1 });
-            }
+            if (existing) existing.quantity += 1;
+            else cart.push({ id, nama, harga, quantity: 1 });
             
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
@@ -336,7 +435,6 @@
         function renderProducts(products) {
             const grid = document.getElementById('productGrid');
             const emptyState = document.getElementById('emptyState');
-            
             grid.innerHTML = '';
             
             if (products.length === 0) {
@@ -344,17 +442,15 @@
                 emptyState.classList.remove('d-none');
                 return;
             }
-            
             grid.classList.remove('d-none');
             emptyState.classList.add('d-none');
 
             products.forEach(p => {
                 const isAvailable = p.stok > 0;
-                // Jika gambar kosong/null, gunakan placeholder
                 const imageSrc = p.gambar ? p.gambar : `https://placehold.co/600x400/e2e8f0/667eea?text=${encodeURIComponent(p.nama_barang)}`;
-                const category = p.category || "Gadget"; // Default category jika null
+                const category = p.category || "Gadget";
 
-                const html = `
+                grid.innerHTML += `
                     <div class="col">
                         <div class="product-card">
                             <div class="card-img-wrapper">
@@ -368,7 +464,6 @@
                                 <h5 class="product-title">${p.nama_barang}</h5>
                                 <p class="product-desc">${p.deskripsi || 'Deskripsi produk belum tersedia.'}</p>
                                 <div class="price-tag">${formatRupiah(p.harga)}</div>
-                                
                                 <button class="btn-add-cart mt-auto" 
                                     onclick="addToCart(${p.id}, '${p.nama_barang.replace(/'/g, "\\'")}', ${p.harga})" 
                                     ${!isAvailable ? 'disabled' : ''}>
@@ -379,7 +474,6 @@
                         </div>
                     </div>
                 `;
-                grid.innerHTML += html;
             });
         }
 
@@ -408,33 +502,17 @@
             grid.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2 text-muted">Memuat katalog...</p></div>';
             
             try {
-                // Coba fetch ke API
                 const res = await fetch('/api/products');
-                
-                if (res.status === 403) {
-                    // Redirect jika butuh auth/key (optional logic)
-                    // window.location.href = 'user_dashboard.html';
-                }
-
                 const data = await res.json();
-
-                if (Array.isArray(data) && data.length > 0) {
-                    allProducts = data; // Gunakan data asli
-                    console.log("Loaded from API");
-                } else {
-                    // FALLBACK: Gunakan Dummy Data jika API kosong/error
-                    allProducts = dummyProducts;
-                    console.log("Loaded Dummy Data");
-                }
+                if (Array.isArray(data) && data.length > 0) allProducts = data;
+                else allProducts = dummyProducts;
             } catch (error) {
-                console.error("Gagal load API, menggunakan data dummy.", error);
-                allProducts = dummyProducts; // Fallback saat error koneksi
+                console.error("Gagal load API, pakai dummy.", error);
+                allProducts = dummyProducts;
             }
-
             renderProducts(allProducts);
         }
 
-        // Init
         loadProducts();
         updateCartCount();
     </script>

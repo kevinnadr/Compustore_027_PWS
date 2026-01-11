@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - CompuStore</title>
+    <title>Daftar Akun - CompuStore</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,336 +14,269 @@
             --primary-color: #667eea;
             --secondary-color: #764ba2;
             --text-dark: #2d3748;
-            --text-muted: #718096;
-            --bg-input: #f8fafc;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
             font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
             background-color: #ffffff;
+            min-height: 100vh;
+            /* Allow scroll on register page because form is longer */
+            overflow-x: hidden; 
         }
 
-        /* --- Animasi Masuk --- */
-        @keyframes fadeInUp {
+        /* Layout Split */
+        .register-wrapper {
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Bagian Kiri (Gambar) */
+        .banner-side {
+            background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+            color: white;
+            position: fixed; /* Fixed agar gambar tetap diam saat form discroll */
+            top: 0; left: 0; bottom: 0; width: 50%;
+        }
+
+        /* Overlay Gradient */
+        .banner-side::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.9) 0%, rgba(102, 126, 234, 0.85) 100%);
+            z-index: 1;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Bagian Kanan (Form) */
+        .form-side {
+            margin-left: 50%; /* Offset karena banner fixed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 60px 40px;
+            min-height: 100vh;
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 480px;
+            animation: fadeUp 0.8s ease;
+        }
+
+        /* Custom Input Modern */
+        .form-floating > .form-control, .form-floating > .form-select {
+            border: 2px solid #f3f4f6;
+            background-color: #f9fafb;
+            border-radius: 12px;
+            height: 55px;
+        }
+
+        .form-floating > .form-control:focus, .form-floating > .form-select:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-floating > label {
+            padding-left: 15px;
+            color: #a0aec0;
+        }
+
+        /* Tombol Modern */
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -5px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+
+        .btn-register:active { transform: scale(0.98); }
+
+        /* Animasi */
+        @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .animate-in {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
-        }
-        
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-
-        /* --- Layout Utama --- */
-        .register-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* --- Sisi Kiri (Gambar) --- */
-        .register-left {
-            position: relative;
-            width: 55%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%); /* Gradient dibalik agar sedikit beda dari login */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 60px;
-            overflow: hidden;
-        }
-
-        .register-bg-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Menggunakan gambar yang sama agar hemat aset */
-            background-image: url('images/BackgroundLogin.jpg'); 
-            background-size: cover;
-            background-position: center;
-            opacity: 0.35;
-            mix-blend-mode: overlay;
-        }
-        
-        .register-left-content {
-            position: relative;
-            z-index: 2;
-            max-width: 600px;
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-        .register-left h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        
-        .register-left p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            line-height: 1.6;
-            font-weight: 300;
-        }
-
-        /* --- Sisi Kanan (Form) --- */
-        .register-right {
-            width: 45%;
-            height: 100%;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 8%;
-            position: relative;
-        }
-
-        /* Navbar */
-        .top-nav {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            display: flex;
-            gap: 20px;
-            z-index: 10;
-        }
-
-        .top-nav a {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 15px;
-            transition: color 0.3s ease;
-            padding: 8px 16px;
-            border-radius: 20px;
-        }
-
-        .top-nav a.active, .top-nav a:hover {
-            color: var(--primary-color);
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        /* Form Wrapper */
-        .register-form-wrapper {
-            width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
-        }
-
-        .register-right h2 {
-            color: var(--text-dark);
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .register-right .subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-        }
-
-        .form-group { margin-bottom: 20px; }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .form-control, .form-select {
-            height: 50px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
-            padding-left: 15px;
-            background-color: var(--bg-input);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-dark);
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
-
-        .btn-register {
-            height: 52px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px -1px rgba(102, 126, 234, 0.5);
-            letter-spacing: 0.5px;
-        }
-        
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(102, 126, 234, 0.6);
-            filter: brightness(1.1);
-        }
-
-        .register-footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-        
-        .register-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .register-footer a:hover {
-            text-decoration: underline;
-            color: var(--secondary-color);
-        }
-
-        /* Responsif */
-        @media (max-width: 992px) {
-            .register-left { display: none; }
-            .register-right { width: 100%; padding: 40px; }
-            .top-nav { justify-content: center; top: 20px; right: 0; width: 100%; }
+        /* Responsive Mobile */
+        @media (max-width: 991px) {
+            .banner-side { display: none; }
+            .form-side { 
+                margin-left: 0; 
+                width: 100%;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                padding: 30px 20px;
+            }
+            .register-box {
+                background: white;
+                padding: 30px;
+                border-radius: 20px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            }
         }
     </style>
 </head>
 <body>
-    
-    <div class="register-container">
-        <div class="register-left">
-            <div class="register-bg-image"></div>
+
+    <div class="container-fluid g-0">
+        <div class="row g-0 register-wrapper">
             
-            <div class="register-left-content animate-in">
-                <h1>Mulai Perjalanan Anda</h1>
-                <p>Bergabunglah dengan komunitas CompuStore untuk mendapatkan akses ke teknologi terbaru dan penawaran eksklusif.</p>
-            </div>
-        </div>
-        
-        <div class="register-right">
-            <nav class="top-nav animate-in delay-1">
-                <a href="index.html">Login</a>
-                <a href="register.html" class="active">Register</a>
-                <a href="#">Docs</a>
-            </nav>
-
-            <div class="register-form-wrapper animate-in delay-2">
-                <h2>Buat Akun Baru</h2>
-                <p class="subtitle">Lengkapi data diri Anda untuk mendaftar.</p>
-                
-                <form id="regForm">
-                    <div class="form-group">
-                        <label class="form-label">Username</label>
-                        <input type="text" id="username" class="form-control" placeholder="Pilih username unik" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <input type="password" id="password" class="form-control" placeholder="Minimal 6 karakter" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Daftar Sebagai</label>
-                        <select id="role" class="form-select">
-                            <option value="user">User (Pembeli)</option>
-                            <option value="admin">Admin (Pengelola)</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-register">
-                        Daftar Sekarang <i class="fas fa-user-plus ms-2"></i>
-                    </button>
-                </form>
-                
-                <div class="register-footer animate-in delay-3">
-                    Sudah punya akun? <a href="index.html">Login disini</a>
+            <div class="col-lg-6 banner-side">
+                <div class="banner-content">
+                    <h3 class="fw-bold"><i class="fas fa-cube me-2"></i> CompuStore</h3>
+                </div>
+                <div class="banner-content mb-5">
+                    <h1 class="display-4 fw-bold mb-3">CompuStore<br>place to buy PC, laptop, and other accessories.</h1>
+                    <p class="lead opacity-75">Create an account now to access thousands of the best and exclusive tech products..</p>
+                </div>
+                <div class="banner-content">
+                    <small class="opacity-50">&copy; 2026 CompuStore Inc.</small>
                 </div>
             </div>
+
+            <div class="col-lg-6 form-side">
+                <div class="register-box">
+                    <div class="text-center d-lg-none mb-4">
+                        <i class="fas fa-cube fa-3x text-primary mb-3"></i>
+                        <h2 class="fw-bold text-dark">CompuStore</h2>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="fw-bold text-dark mb-2">Buat Akun Baru 🚀</h2>
+                        <p class="text-muted">Lengkapi data diri Anda untuk memulai.</p>
+                    </div>
+
+                    <form id="registerForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nama" placeholder="Nama Lengkap" required>
+                            <label for="nama">Nama Lengkap</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                            <label for="email">Alamat Email</label>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control" id="no_hp" placeholder="08xxx" required>
+                                    <label for="no_hp">No. Handphone</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="role">
+                                        <option value="user" selected>User (Pembeli)</option>
+                                        <option value="admin">Admin (Pengelola)</option>
+                                    </select>
+                                    <label for="role">Daftar Sebagai</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                            <label for="password">Kata Sandi</label>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" value="" id="terms" required>
+                            <label class="form-check-label small text-muted" for="terms">
+                                Saya menyetujui <a href="#" style="color: var(--primary-color);">Syarat & Ketentuan</a> yang berlaku.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-register">
+                            Daftar Sekarang <i class="fas fa-user-plus ms-2"></i>
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted small">Sudah memiliki akun? 
+                                <a href="index.html" class="text-decoration-none fw-bold" style="color: var(--primary-color);">Masuk di sini</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        document.getElementById('regForm').onsubmit = async (e) => {
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const btn = document.querySelector('.btn-register');
             const originalText = btn.innerHTML;
             
-            // Efek Loading UI
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            // Loading State
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendaftarkan...'; 
             btn.disabled = true;
-            btn.style.opacity = '0.7';
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const role = document.getElementById('role').value;
+
+            const data = {
+                nama: document.getElementById('nama').value,
+                email: document.getElementById('email').value,
+                no_hp: document.getElementById('no_hp').value,
+                role: document.getElementById('role').value,
+                password: document.getElementById('password').value
+            };
 
             try {
                 const res = await fetch('/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password,
-                        role: role
-                    })
+                    body: JSON.stringify(data)
                 });
 
-                const data = await res.json();
-                
-                if (data.success) {
-                    // Jika sukses, beri jeda sedikit agar user lihat
+                const result = await res.json();
+
+                if(result.success) {
+                    // Animasi sukses
                     btn.innerHTML = '<i class="fas fa-check"></i> Berhasil!';
-                    btn.style.background = '#48bb78'; // Warna hijau sukses
+                    btn.classList.remove('btn-register');
+                    btn.classList.add('btn-success');
                     
                     setTimeout(() => {
-                        alert('Registrasi Berhasil! Silakan Login.');
                         window.location.href = 'index.html';
-                    }, 500);
+                    }, 1500);
                 } else {
-                    alert('Gagal: ' + (data.message || 'Username mungkin sudah dipakai'));
-                    btn.innerHTML = originalText;
+                    alert('Gagal: ' + result.message);
+                    btn.innerHTML = originalText; 
                     btn.disabled = false;
-                    btn.style.opacity = '1';
                 }
             } catch (err) {
                 console.error(err);
-                alert("Terjadi kesalahan koneksi");
-                btn.innerHTML = originalText;
+                alert('Terjadi kesalahan koneksi server');
+                btn.innerHTML = originalText; 
                 btn.disabled = false;
-                btn.style.opacity = '1';
             }
-        };
+        });
     </script>
 </body>
 </html>
