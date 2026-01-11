@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CompuStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navbar .btn-outline-danger:hover {
+            background-color: #dc3545 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-section h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header-section p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 20px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            height: 45px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            height: 45px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-success-custom {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-success-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-small {
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning-custom {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-warning-custom:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        .btn-danger-custom {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger-custom:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+        
+        .table-responsive {
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+        }
+        
+        .table thead th {
+            font-weight: 700;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 15px;
+        }
+        
+        .table tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .table-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .badge {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px;
+        }
+        
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #e0e0e0;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 28px;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+        }
+
+        .order-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .order-item:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .order-status.pending {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .order-status.send {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+        }
+
+        .order-status.cancel {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .order-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .order-actions button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .order-actions .btn-send {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+        }
+
+        .order-actions .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .order-actions .btn-cancel {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .order-actions .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .order-info {
+            font-size: 13px;
+            margin: 8px 0;
+            color: #666;
+        }
+
+        .order-info strong {
+            color: #333;
+        }
+
+        .order-items-preview {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .empty-orders {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-orders i {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-shield-alt"></i> CompuStore Admin Panel</a>
+            <a href="/auth/logout" class="btn btn-outline-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="header-section">
+        <div class="container">
+            <h1><i class="fas fa-cog"></i> Admin Dashboard</h1>
+            <p>Kelola produk dan user CompuStore dengan mudah dan efisien</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="row mb-5">
+            <!-- Kolom Kiri: Form Tambah Produk -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-plus-circle"></i> Tambah Produk Baru
+                    </div>
+                    <div class="card-body">
+                        <form id="productForm">
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-box"></i> Nama Barang</label>
+                                <input type="text" id="nama" class="form-control" placeholder="Nama produk..." required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-tag"></i> Harga (IDR)</label>
+                                <input type="number" id="harga" class="form-control" placeholder="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-warehouse"></i> Stok</label>
+                                <input type="number" id="stok" class="form-control" placeholder="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-image"></i> Foto Produk</label>
+                                <input type="file" id="gambar" class="form-control" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label"><i class="fas fa-align-left"></i> Deskripsi</label>
+                                <textarea id="deskripsi" class="form-control" placeholder="Deskripsi produk..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-save"></i> Simpan Produk
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Tabel Produk -->
+            <div class="col-lg-8">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i> Daftar Produk
+                    </div>
+                    <div class="card-body p-0 table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Nama Produk</th>
+                                    <th>Stok</th>
+                                    <th class="text-end" style="width: 150px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Manajemen User -->
+        <div class="row pb-5">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="dashboardTabs" role="tablist" style="margin-bottom: 0;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-content" type="button">
+                            <i class="fas fa-users"></i> Manajemen User
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders-content" type="button">
+                            <i class="fas fa-shopping-bag"></i> Order History
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="dashboardTabContent" style="border: none; padding: 0;">
+                    <!-- TAB 1: USERS -->
+                    <div class="tab-pane fade show active" id="users-content" role="tabpanel">
+                        <div class="card" style="margin-top: -1px; border-radius: 0 0 12px 12px;">
+                            <div class="card-header" style="border-radius: 0;">
+                                <div>
+                                    <i class="fas fa-users"></i> Manajemen User (Pembeli)
+                                </div>
+                                <button class="btn btn-success-custom btn-small" onclick="prepareAddUser()">
+                                    <i class="fas fa-user-plus"></i> + Tambah User
+                                </button>
+                            </div>
+                            <div class="card-body p-0 table-responsive">
+                                <table class="table table-hover mb-0 align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fas fa-user"></i> Username</th>
+                                            <th><i class="fas fa-lock"></i> Password</th>
+                                            <th><i class="fas fa-key"></i> API Key Status</th>
+                                            <th class="text-end" style="width: 150px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="userList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: ORDER HISTORY -->
+                    <div class="tab-pane fade" id="orders-content" role="tabpanel">
+                        <div class="card" style="margin-top: -1px; border-radius: 0 0 12px 12px;">
+                            <div class="card-header" style="border-radius: 0;">
+                                <i class="fas fa-shopping-bag"></i> Riwayat Pesanan
+                            </div>
+                            <div class="card-body">
+                                <div id="ordersList" style="max-height: 600px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-box"></i> Nama Barang</label>
+                            <input type="text" id="editNama" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-tag"></i> Harga (IDR)</label>
+                            <input type="number" id="editHarga" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-warehouse"></i> Stok</label>
+                            <input type="number" id="editStok" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-image"></i> Ganti Foto (Opsional)</label>
+                            <input type="file" id="editGambar" class="form-control" accept="image/*">
+                            <small class="text-muted">Biarkan kosong jika tidak ingin mengganti foto.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-align-left"></i> Deskripsi</label>
+                            <textarea id="editDeskripsi" class="form-control"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-warning-custom btn-small" onclick="updateProduct()">
+                        <i class="fas fa-check"></i> Update Produk
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalTitle"><i class="fas fa-user-plus"></i> Tambah User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="userId">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="userNameInput" class="form-control" placeholder="Username..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                        <input type="text" id="userPassInput" class="form-control" placeholder="Password..." required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success-custom btn-small" onclick="saveUser()">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variabel global untuk menyimpan data produk agar mudah diambil saat edit
+        let globalProducts = [];
+        
+        // Modal Instances
+        const userModal = new bootstrap.Modal(document.getElementById('userModal'));
+        const productModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+
+        const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
+
+        // === LOAD DATA UTAMA ===
+        async function loadAdminData() {
+            const res = await fetch('/api/admin/data');
+            if (res.status === 403) return window.location.href = 'index.html';
+            const data = await res.json();
+
+            // Simpan ke global variable
+            globalProducts = data.products;
+
+            // Render Produk
+            const pList = document.getElementById('productList');
+            pList.innerHTML = '';
+            data.products.forEach((p, index) => {
+                const imgHTML = p.gambar ? `<img src="${p.gambar}" class="table-img">` : '<span class="text-muted small"><i class="fas fa-image-slash"></i> No Img</span>';
+                
+                pList.innerHTML += `
+                <tr>
+                    <td>${imgHTML}</td>
+                    <td>
+                        <div class="fw-600">${p.nama_barang}</div>
+                        <small class="text-muted">Rp ${new Intl.NumberFormat('id-ID').format(p.harga)}</small>
+                    </td>
+                    <td><span class="badge bg-info" style="background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%) !important;">${p.stok}</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-warning-custom btn-small" onclick="prepareEditProduct(${index})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger-custom btn-small" onclick="deleteProduct(${p.id})">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                </tr>`;
+            });
+
+            // Render User
+            const uList = document.getElementById('userList');
+            uList.innerHTML = '';
+            data.users.forEach(u => {
+                const statusBadge = u.api_key 
+                    ? `<span class="badge" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fas fa-check-circle"></i> Active</span> <br><small class="text-muted" style="font-size:11px"><i class="fas fa-key"></i> ${u.api_key.substring(0,8)}...</small>` 
+                    : `<span class="badge" style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);"><i class="fas fa-times-circle"></i> Non Active</span>`;
+                
+                uList.innerHTML += `
+                <tr>
+                    <td><i class="fas fa-user-circle"></i> ${u.username}</td>
+                    <td><code style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px;">${u.password}</code></td>
+                    <td>${statusBadge}</td>
+                    <td class="text-end">
+                        <button class="btn btn-warning-custom btn-small" onclick="prepareEditUser(${u.id}, '${u.username}', '${u.password}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger-custom btn-small" onclick="deleteUser(${u.id})">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                </tr>`;
+            });
+
+            // Load Orders
+            loadOrders();
+        }
+
+        async function loadOrders() {
+            try {
+                const res = await fetch('/api/admin/orders');
+                if (res.status === 403) return;
+                
+                const orders = await res.json();
+                const ordersList = document.getElementById('ordersList');
+                
+                if (!orders || orders.length === 0) {
+                    ordersList.innerHTML = `
+                        <div class="empty-orders">
+                            <i class="fas fa-inbox"></i>
+                            <p>Belum ada pesanan</p>
+                        </div>`;
+                    return;
+                }
+
+                ordersList.innerHTML = '';
+                orders.forEach(order => {
+                    let statusClass = order.status;
+                    let statusText = '';
+                    
+                    if (order.status === 'pending') {
+                        statusText = 'Pending';
+                    } else if (order.status === 'send') {
+                        statusText = 'Dikirim';
+                    } else if (order.status === 'cancel') {
+                        statusText = 'Dibatalkan';
+                    } else {
+                        statusText = order.status;
+                    }
+                    
+                    let itemsPreview = '<strong>Produk:</strong> ';
+                    if (order.items && typeof order.items === 'string') {
+                        try {
+                            const items = JSON.parse(order.items);
+                            itemsPreview += items.map(item => `${item.nama} (×${item.quantity})`).join(', ');
+                        } catch (e) {
+                            itemsPreview += order.items;
+                        }
+                    }
+
+                    // Generate tombol aksi berdasarkan status
+                    let actionButtons = '';
+                    if (order.status === 'pending') {
+                        actionButtons = `
+                            <button class="btn-send" onclick="updateOrderStatus(${order.id}, 'send')">
+                                <i class="fas fa-truck"></i> Kirim
+                            </button>
+                            <button class="btn-cancel" onclick="updateOrderStatus(${order.id}, 'cancel')">
+                                <i class="fas fa-times"></i> Batalkan
+                            </button>`;
+                    } else if (order.status === 'send') {
+                        actionButtons = `<span style="color: #3b82f6; font-weight: 600;"><i class="fas fa-check-circle"></i> Sudah Dikirim</span>
+                            <button class="btn-cancel" onclick="updateOrderStatus(${order.id}, 'cancel')" style="margin-top: 8px;">
+                                <i class="fas fa-times"></i> Batalkan
+                            </button>`;
+                    } else if (order.status === 'cancel') {
+                        actionButtons = `<span style="color: #ef4444; font-weight: 600;"><i class="fas fa-ban"></i> Pesanan Dibatalkan</span>`;
+                    }
+
+                    const orderHTML = `
+                        <div class="order-item">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#Order ${order.id}</div>
+                                </div>
+                                <span class="order-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="order-info">
+                                <strong>Pembeli:</strong> ${order.customer_name}
+                            </div>
+                            <div class="order-info">
+                                <strong>Kontak:</strong> ${order.phone}
+                            </div>
+                            <div class="order-info">
+                                <strong>Alamat:</strong> ${order.address}, ${order.city}, ${order.postal_code}
+                            </div>
+                            <div class="order-info">
+                                <strong>Metode Pembayaran:</strong> ${order.payment_method.toUpperCase()}
+                            </div>
+                            <div class="order-info">
+                                <strong>Total:</strong> ${formatRupiah(order.total_amount)}
+                            </div>
+                            <div class="order-items-preview">
+                                ${itemsPreview}
+                            </div>
+                            <div class="order-actions">
+                                ${actionButtons}
+                            </div>
+                        </div>`;
+                    
+                    ordersList.innerHTML += orderHTML;
+                });
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+
+        // ================= LOGIC PRODUK =================
+
+        // 1. TAMBAH PRODUK
+        document.getElementById('productForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('nama', document.getElementById('nama').value);
+            formData.append('harga', document.getElementById('harga').value);
+            formData.append('stok', document.getElementById('stok').value);
+            formData.append('deskripsi', document.getElementById('deskripsi').value);
+            
+            const fileInput = document.getElementById('gambar');
+            if(fileInput.files[0]) formData.append('gambar', fileInput.files[0]);
+
+            await fetch('/api/admin/product', { method: 'POST', body: formData });
+            document.getElementById('productForm').reset();
+            loadAdminData();
+        };
+
+        // 2. EDIT PRODUK (Persiapan & Eksekusi)
+        function prepareEditProduct(index) {
+            const p = globalProducts[index]; // Ambil data dari array global berdasarkan index
+            
+            document.getElementById('editId').value = p.id;
+            document.getElementById('editNama').value = p.nama_barang;
+            document.getElementById('editHarga').value = p.harga;
+            document.getElementById('editStok').value = p.stok;
+            document.getElementById('editDeskripsi').value = p.deskripsi;
+            document.getElementById('editGambar').value = ''; // Reset input file
+            
+            productModal.show();
+        }
+
+        async function updateProduct() {
+            const id = document.getElementById('editId').value;
+            const formData = new FormData();
+            
+            formData.append('nama', document.getElementById('editNama').value);
+            formData.append('harga', document.getElementById('editHarga').value);
+            formData.append('stok', document.getElementById('editStok').value);
+            formData.append('deskripsi', document.getElementById('editDeskripsi').value);
+            
+            const fileInput = document.getElementById('editGambar');
+            if (fileInput.files[0]) {
+                formData.append('gambar', fileInput.files[0]);
+            }
+
+            // Kirim request PUT
+            const res = await fetch(`/api/admin/product/${id}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                productModal.hide();
+                loadAdminData();
+            } else {
+                alert('Gagal update produk');
+            }
+        }
+
+        // 3. HAPUS PRODUK
+        async function deleteProduct(id) {
+            if(confirm('Hapus produk ini?')) {
+                await fetch(`/api/admin/product/${id}`, { method: 'DELETE' });
+                loadAdminData();
+            }
+        }
+
+        // ================= LOGIC USER =================
+        
+        let isEditUserMode = false;
+
+        function prepareAddUser() {
+            isEditUserMode = false;
+            document.getElementById('userModalTitle').innerHTML = "<i class='fas fa-user-plus'></i> Tambah User";
+            document.getElementById('userId').value = '';
+            document.getElementById('userNameInput').value = '';
+            document.getElementById('userPassInput').value = '';
+            userModal.show();
+        }
+
+        function prepareEditUser(id, user, pass) {
+            isEditUserMode = true;
+            document.getElementById('userModalTitle').innerHTML = "<i class='fas fa-user-edit'></i> Edit User";
+            document.getElementById('userId').value = id;
+            document.getElementById('userNameInput').value = user;
+            document.getElementById('userPassInput').value = pass;
+            userModal.show();
+        }
+
+        async function saveUser() {
+            const id = document.getElementById('userId').value;
+            const username = document.getElementById('userNameInput').value;
+            const password = document.getElementById('userPassInput').value;
+            
+            if(!username || !password) return alert("Isi semua field");
+
+            let url = '/api/admin/user';
+            let method = 'POST';
+
+            if (isEditUserMode) {
+                url = `/api/admin/user/${id}`;
+                method = 'PUT';
+            }
+
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await res.json();
+            if(data.success) {
+                userModal.hide();
+                loadAdminData();
+            } else {
+                alert('Gagal (Username mungkin sudah ada)');
+            }
+        }
+
+        async function deleteUser(id) {
+            if(confirm('Hapus user ini?')) {
+                await fetch(`/api/admin/user/${id}`, { method: 'DELETE' });
+                loadAdminData();
+            }
+        }
+
+        // ================= LOGIC ORDER =================
+
+        async function updateOrderStatus(orderId, newStatus) {
+            const statusLabel = {
+                'send': 'Dikirim',
+                'cancel': 'Dibatalkan'
+            };
+
+            if(confirm(`Ubah status pesanan menjadi "${statusLabel[newStatus]}"?`)) {
+                try {
+                    const res = await fetch(`/api/admin/order/${orderId}/status`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        alert(`Status pesanan berhasil diubah menjadi "${statusLabel[newStatus]}"`);
+                        loadOrders(); // Reload orders list
+                    } else {
+                        alert('Gagal mengubah status pesanan');
+                    }
+                } catch (error) {
+                    console.error('Error updating order status:', error);
+                    alert('Terjadi kesalahan');
+                }
+            }
+        }
+
+        // Jalankan saat halaman dibuka
+        loadAdminData();
+    </script>
+</body>
+</html>
