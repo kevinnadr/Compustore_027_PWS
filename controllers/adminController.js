@@ -1,147 +1,87 @@
 const db = require('../config/database');
 
-// --- ADMIN DASHBOARD ---
-
-// READ: Ambil Semua Data (Produk & User) untuk Dashboard
-exports.getDashboardData = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-    
-    const queryProds = 'SELECT * FROM products';
-    const queryUsers = 'SELECT id, username, password, api_key, role FROM users WHERE role="user"'; 
-    
-    db.query(queryProds, (err, products) => {
-        if (err) {
-            return res.status(500).json({ error: 'Gagal mengambil data produk' });
-        }
+// --- GET DASHBOARD DATA (Users & Products) ---
+exports.getDashboardData = async (req, res) => {
+    try {
+        // Ambil data Produk
+        const [products] = await db.promise().query('SELECT * FROM products ORDER BY id DESC');
         
-        db.query(queryUsers, (err, users) => {
-            if (err) {
-                return res.status(500).json({ error: 'Gagal mengambil data user' });
-            }
-            
-            res.json({ products, users });
-        });
-    });
+        // Ambil data Users (Lengkap)
+        const [users] = await db.promise().query('SELECT id, nama, email, password, no_hp, role, api_key FROM users ORDER BY id DESC');
+        
+        res.json({ products: products, users: users });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
 };
 
-// --- USER MANAGEMENT (ADMIN) ---
-
-// CREATE: Tambah User Baru (Manual oleh Admin)
+// --- CREATE USER (Admin) ---
 exports.createUser = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
+    const { nama, email, password, no_hp, role } = req.body;
+    
+    if(!nama || !email || !password) {
+        return res.status(400).json({success: false, message: 'Data tidak lengkap'});
     }
-    
-    const { username, password } = req.body;
-    
-    // Validasi input
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Username dan password wajib diisi' });
-    }
-    
-    db.query('INSERT INTO users (username, password, role) VALUES (?, ?, "user")', [username, password], (err) => {
-        if (err) {
-            console.error('Error creating user:', err);
-            return res.status(400).json({ success: false, message: 'Username sudah ada' });
+
+    const sql = 'INSERT INTO users (nama, email, password, no_hp, role) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nama, email, password, no_hp, role || 'user'], (err) => {
+        if(err) {
+            if(err.code === 'ER_DUP_ENTRY') return res.status(400).json({success: false, message: 'Email sudah dipakai'});
+            return res.status(500).json({success: false, message: err.message});
         }
-        res.json({ 
-            success: true, 
-            message: 'User berhasil ditambahkan' 
-        });
+        res.json({success: true});
     });
 };
 
-// READ: Ambil Semua User
-exports.getAllUsers = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
+// --- UPDATE USER (Admin) ---
+exports.updateUser = (req, res) => {
+    const { id } = req.params;
+    const { nama, email, password, no_hp, role } = req.body;
+    
+    let sql = 'UPDATE users SET nama=?, email=?, no_hp=?, role=?';
+    let params = [nama, email, no_hp, role];
+
+    // Hanya update password jika diisi
+    if(password && password.trim() !== "") {
+        sql += ', password=?';
+        params.push(password);
     }
     
-    db.query('SELECT id, username, api_key, role FROM users', (err, results) => {
-        if (err) {
-            console.error('Error fetching users:', err);
-            return res.status(500).json({ error: 'Gagal mengambil data user' });
-        }
+    sql += ' WHERE id=?';
+    params.push(id);
+
+    db.query(sql, params, (err) => {
+        if(err) return res.status(500).json({success: false, message: 'Gagal update user'});
+        res.json({success: true});
+    });
+};
+
+// --- DELETE USER (Admin) ---
+exports.deleteUser = (req, res) => {
+    const { id } = req.params;
+    
+    // Opsional: Hapus order user ini dulu atau biarkan (tergantung constraint DB)
+    db.query('DELETE FROM users WHERE id = ?', [id], (err) => {
+        if(err) return res.status(500).json({success: false, message: 'Gagal hapus'});
+        res.json({success: true});
+    });
+};
+
+// --- GET ALL USERS (Admin) ---
+exports.getAllUsers = (req, res) => {
+    db.query('SELECT id, nama, email, no_hp, role, api_key FROM users ORDER BY id DESC', (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
         res.json(results);
     });
 };
 
-// READ: Ambil User Berdasarkan ID
+// --- GET USER BY ID (Admin) ---
 exports.getUserById = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-    
     const { id } = req.params;
-    
-    db.query('SELECT id, username, password, api_key, role FROM users WHERE id = ?', [id], (err, results) => {
-        if (err) {
-            console.error('Error fetching user:', err);
-            return res.status(500).json({ error: 'Gagal mengambil data user' });
-        }
-        
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'User tidak ditemukan' });
-        }
-        
+    db.query('SELECT id, nama, email, password, no_hp, role, api_key FROM users WHERE id = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        if (results.length === 0) return res.status(404).json({ error: 'User not found' });
         res.json(results[0]);
-    });
-};
-
-// UPDATE: Edit User (Ganti Username/Password)
-exports.updateUser = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-    
-    const { id } = req.params;
-    const { username, password } = req.body;
-    
-    // Validasi input
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Username dan password wajib diisi' });
-    }
-    
-    db.query('UPDATE users SET username = ?, password = ? WHERE id = ?', [username, password, id], (err) => {
-        if (err) {
-            console.error('Error updating user:', err);
-            return res.status(400).json({ success: false, message: 'Username sudah ada atau error lainnya' });
-        }
-        res.json({ 
-            success: true, 
-            message: 'User berhasil diubah' 
-        });
-    });
-};
-
-// DELETE: Hapus User
-exports.deleteUser = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-    
-    const { id } = req.params;
-    
-    // Prevent deleting self
-    if (id == req.session.userid) {
-        return res.status(400).json({ error: 'Tidak bisa menghapus akun sendiri' });
-    }
-    
-    db.query('DELETE FROM users WHERE id = ?', [id], (err, result) => {
-        if (err) {
-            console.error('Error deleting user:', err);
-            return res.status(500).json({ error: 'Gagal menghapus user' });
-        }
-        
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'User tidak ditemukan' });
-        }
-        
-        res.json({ 
-            success: true, 
-            message: 'User berhasil dihapus' 
-        });
     });
 };

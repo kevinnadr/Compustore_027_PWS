@@ -1,141 +1,113 @@
 const db = require('../config/database');
+const fs = require('fs');
+const path = require('path');
 
-// --- CRUD PRODUK (CompuStore) ---
-
-// READ: Ambil Semua Produk
+// --- GET ALL PRODUCTS ---
 exports.getAllProducts = (req, res) => {
-    db.query('SELECT * FROM products', (err, results) => {
+    // Filter Query (Optional)
+    const { search, kategori } = req.query;
+    let sql = 'SELECT * FROM products WHERE 1=1';
+    let params = [];
+
+    if (search) {
+        sql += ' AND (nama_barang LIKE ? OR deskripsi LIKE ?)';
+        params.push(`%${search}%`, `%${search}%`);
+    }
+    if (kategori) {
+        sql += ' AND kategori = ?'; // Pastikan kolom kategori ada di DB jika fitur ini aktif
+        params.push(kategori);
+    }
+    
+    sql += ' ORDER BY id DESC';
+
+    db.query(sql, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Error mengambil data produk' });
+            console.error(err);
+            return res.status(500).json({ error: 'Database error' });
         }
         res.json(results);
     });
 };
 
-// READ: Ambil Produk Berdasarkan ID
+// --- GET SINGLE PRODUCT ---
 exports.getProductById = (req, res) => {
     const { id } = req.params;
-    
     db.query('SELECT * FROM products WHERE id = ?', [id], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error mengambil data produk' });
-        }
-        
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'Produk tidak ditemukan' });
-        }
-        
+        if (err) return res.status(500).json({ error: 'Database error' });
+        if (results.length === 0) return res.status(404).json({ error: 'Produk tidak ditemukan' });
         res.json(results[0]);
     });
 };
 
-// CREATE: Tambah Produk Baru (Admin Only)
+// --- CREATE PRODUCT (Admin) ---
 exports.createProduct = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-    
     const { nama, harga, stok, deskripsi } = req.body;
-    const gambar = req.file ? '/uploads/' + req.file.filename : null;
+    // Gambar dari Multer (req.file)
+    const gambar = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Validasi input
     if (!nama || !harga || !stok) {
-        return res.status(400).json({ error: 'Nama, harga, dan stok wajib diisi' });
+        return res.status(400).json({ error: 'Nama, Harga, dan Stok wajib diisi' });
     }
 
-    const sql = 'INSERT INTO products (nama_barang, harga, stok, deskripsi, gambar) VALUES (?,?,?,?,?)';
+    const sql = 'INSERT INTO products (nama_barang, harga, stok, deskripsi, gambar) VALUES (?, ?, ?, ?, ?)';
     db.query(sql, [nama, harga, stok, deskripsi, gambar], (err, result) => {
         if (err) {
-            console.error('Error creating product:', err);
+            console.error(err);
             return res.status(500).json({ error: 'Gagal menambah produk' });
         }
-        res.json({ 
-            success: true, 
-            message: 'Produk berhasil ditambahkan',
-            productId: result.insertId 
-        });
+        res.json({ success: true, message: 'Produk berhasil ditambahkan', id: result.insertId });
     });
 };
 
-// UPDATE: Edit Produk (Admin Only)
+// --- UPDATE PRODUCT (Admin) ---
 exports.updateProduct = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-
-    const { nama, harga, stok, deskripsi } = req.body;
     const { id } = req.params;
-
-    // Validasi input
-    if (!nama || !harga || !stok) {
-        return res.status(400).json({ error: 'Nama, harga, dan stok wajib diisi' });
-    }
-
-    let sql;
-    let params;
+    const { nama, harga, stok, deskripsi } = req.body;
+    
+    // Cek apakah ada gambar baru
+    let sql = 'UPDATE products SET nama_barang=?, harga=?, stok=?, deskripsi=?';
+    let params = [nama, harga, stok, deskripsi];
 
     if (req.file) {
-        // Jika admin upload gambar baru -> Update kolom gambar juga
-        const gambar = '/uploads/' + req.file.filename;
-        sql = 'UPDATE products SET nama_barang = ?, harga = ?, stok = ?, deskripsi = ?, gambar = ? WHERE id = ?';
-        params = [nama, harga, stok, deskripsi, gambar, id];
-    } else {
-        // Jika tidak upload gambar -> Update data teks saja
-        sql = 'UPDATE products SET nama_barang = ?, harga = ?, stok = ?, deskripsi = ? WHERE id = ?';
-        params = [nama, harga, stok, deskripsi, id];
+        sql += ', gambar=?';
+        params.push(`/uploads/${req.file.filename}`);
+        
+        // (Opsional) Hapus gambar lama di sini jika perlu
     }
+
+    sql += ' WHERE id=?';
+    params.push(id);
 
     db.query(sql, params, (err) => {
-        if (err) {
-            console.error('Error updating product:', err);
-            return res.status(500).json({ error: 'Gagal mengubah produk' });
-        }
-        res.json({ 
-            success: true, 
-            message: 'Produk berhasil diubah' 
-        });
+        if (err) return res.status(500).json({ success: false, message: 'Gagal update' });
+        res.json({ success: true, message: 'Produk berhasil diupdate' });
     });
 };
 
-// DELETE: Hapus Produk (Admin Only)
+// --- DELETE PRODUCT (Admin) ---
 exports.deleteProduct = (req, res) => {
-    if (req.session.role !== 'admin') {
-        return res.status(403).json({ error: 'Bukan Admin' });
-    }
-    
     const { id } = req.params;
     
-    db.query('DELETE FROM products WHERE id = ?', [id], (err, result) => {
-        if (err) {
-            console.error('Error deleting product:', err);
-            return res.status(500).json({ error: 'Gagal menghapus produk' });
+    // Ambil info gambar dulu untuk dihapus filenya
+    db.query('SELECT gambar FROM products WHERE id = ?', [id], (err, results) => {
+        if (!err && results.length > 0 && results[0].gambar) {
+            const filePath = path.join(__dirname, '../public', results[0].gambar);
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath); // Hapus file fisik
         }
-        
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Produk tidak ditemukan' });
-        }
-        
-        res.json({ 
-            success: true, 
-            message: 'Produk berhasil dihapus' 
+
+        db.query('DELETE FROM products WHERE id = ?', [id], (err) => {
+            if (err) return res.status(500).json({ success: false });
+            res.json({ success: true });
         });
     });
 };
 
-// BELI PRODUK: Kurangi Stok (User)
+// --- BUY PRODUCT (Kurangi Stok) ---
 exports.buyProduct = (req, res) => {
     const { id } = req.params;
-    
     db.query('UPDATE products SET stok = stok - 1 WHERE id = ? AND stok > 0', [id], (err, result) => {
-        if (err) {
-            console.error('Error buying product:', err);
-            return res.status(500).json({ error: 'Error pada server' });
-        }
-        
-        if (result.changedRows > 0) {
-            res.json({ success: true, message: 'Pembelian Berhasil!' });
-        } else {
-            res.json({ success: false, message: 'Stok Habis' });
-        }
+        if (err) return res.status(500).json({ success: false, error: 'Database error' });
+        if (result.affectedRows === 0) return res.status(400).json({ success: false, message: 'Stok habis' });
+        res.json({ success: true, message: 'Pembelian berhasil' });
     });
 };
