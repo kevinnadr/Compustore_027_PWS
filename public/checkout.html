@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - CompuStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-section h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 20px;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            height: 45px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .payment-method {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .payment-method:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+        
+        .payment-method input[type="radio"] {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .payment-method.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        .method-icon {
+            font-size: 24px;
+            color: #667eea;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .method-info h6 {
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+        }
+        
+        .method-info p {
+            font-size: 12px;
+            color: #999;
+            margin: 0;
+        }
+        
+        .order-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .summary-item label {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .summary-item .value {
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .summary-total {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 12px;
+            font-size: 18px;
+            color: #667eea;
+        }
+        
+        .btn-pay {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .step-indicator {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #999;
+        }
+        
+        .step.active {
+            color: #667eea;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        .step.active .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="products.html"><i class="fas fa-arrow-left"></i> CompuStore</a>
+            <div>
+                <a href="/auth/logout" class="btn btn-light btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header-section">
+        <div class="container">
+            <h1><i class="fas fa-credit-card"></i> Checkout</h1>
+            <p>Selesaikan pembayaran untuk menyelesaikan pesanan Anda</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <span>Alamat Pengiriman</span>
+            </div>
+            <div style="color: #ccc;">→</div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <span>Metode Pembayaran</span>
+            </div>
+            <div style="color: #ccc;">→</div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Konfirmasi</span>
+            </div>
+        </div>
+
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+            <h4>Pesanan Berhasil Dibuat!</h4>
+            <p>Terima kasih telah berbelanja di CompuStore. Silakan cek email untuk detail pesanan.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Alamat Pengiriman -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-map-marker-alt"></i> Alamat Pengiriman
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-user"></i> Nama Penerima</label>
+                                <input type="text" id="fullName" class="form-control" placeholder="Nama lengkap..." required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-phone"></i> Nomor Telepon</label>
+                                <input type="tel" id="phone" class="form-control" placeholder="08xxxxxxxxxx" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-building"></i> Provinsi</label>
+                            <select id="province" class="form-select" required>
+                                <option value="">Pilih Provinsi...</option>
+                                <option value="jawa-timur">Jawa Timur</option>
+                                <option value="jawa-tengah">Jawa Tengah</option>
+                                <option value="jawa-barat">Jawa Barat</option>
+                                <option value="sumatera">Sumatera</option>
+                                <option value="kalimantan">Kalimantan</option>
+                                <option value="sulawesi">Sulawesi</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-city"></i> Kota/Kabupaten</label>
+                                <input type="text" id="city" class="form-control" placeholder="Nama kota..." required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label"><i class="fas fa-map"></i> Kode Pos</label>
+                                <input type="text" id="postalCode" class="form-control" placeholder="12345" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-home"></i> Alamat Lengkap</label>
+                            <textarea id="address" class="form-control" placeholder="Jalan, nomor rumah, RT/RW, detail lainnya..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metode Pembayaran -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-credit-card"></i> Metode Pembayaran
+                    </div>
+                    <div class="card-body">
+                        <label class="form-label" style="margin-bottom: 15px;">Pilih metode pembayaran:</label>
+                        
+                        <div class="payment-method selected" onclick="selectPayment('bca')">
+                            <input type="radio" name="payment" value="bca" checked onchange="selectPayment('bca')">
+                            <div class="method-icon"><i class="fas fa-university"></i></div>
+                            <div class="method-info">
+                                <h6>Transfer Bank BCA</h6>
+                                <p>Transfer langsung ke rekening BCA CompuStore</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPayment('bni')">
+                            <input type="radio" name="payment" value="bni" onchange="selectPayment('bni')">
+                            <div class="method-icon"><i class="fas fa-university"></i></div>
+                            <div class="method-info">
+                                <h6>Transfer Bank BNI</h6>
+                                <p>Transfer langsung ke rekening BNI CompuStore</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPayment('mandiri')">
+                            <input type="radio" name="payment" value="mandiri" onchange="selectPayment('mandiri')">
+                            <div class="method-icon"><i class="fas fa-university"></i></div>
+                            <div class="method-info">
+                                <h6>Transfer Bank Mandiri</h6>
+                                <p>Transfer langsung ke rekening Mandiri CompuStore</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPayment('ewallet')">
+                            <input type="radio" name="payment" value="ewallet" onchange="selectPayment('ewallet')">
+                            <div class="method-icon"><i class="fas fa-wallet"></i></div>
+                            <div class="method-info">
+                                <h6>E-Wallet (GCash, Dana, OVO)</h6>
+                                <p>Pembayaran melalui dompet digital</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPayment('cod')">
+                            <input type="radio" name="payment" value="cod" onchange="selectPayment('cod')">
+                            <div class="method-icon"><i class="fas fa-money-bill"></i></div>
+                            <div class="method-info">
+                                <h6>Cash On Delivery (COD)</h6>
+                                <p>Bayar saat barang sampai di tangan Anda</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle"></i> <strong>Catatan:</strong> Pembayaran akan diverifikasi sebelum pesanan diproses.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="order-summary">
+                    <h5 style="margin-bottom: 20px; font-weight: 700;"><i class="fas fa-receipt"></i> Ringkasan Pesanan</h5>
+                    
+                    <div id="orderItems" style="margin-bottom: 15px; max-height: 300px; overflow-y: auto;"></div>
+                    
+                    <div class="summary-item">
+                        <label>Subtotal:</label>
+                        <span class="value" id="subtotal">Rp 0</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <label>Ongkir:</label>
+                        <span class="value" id="shipping">Rp 25.000</span>
+                    </div>
+                    
+                    <div class="summary-item summary-total">
+                        <label>Total Pembayaran:</label>
+                        <span class="value" id="total">Rp 0</span>
+                    </div>
+                    
+                    <button class="btn-pay" onclick="processOrder()">
+                        <i class="fas fa-check-circle"></i> Konfirmasi Pesanan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
+        const SHIPPING_COST = 25000;
+
+        function selectPayment(method) {
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.payment-method').classList.add('selected');
+        }
+
+        function loadOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const orderItemsDiv = document.getElementById('orderItems');
+            
+            let subtotal = 0;
+            let itemsHTML = '';
+
+            cart.forEach(item => {
+                const itemTotal = item.harga * item.quantity;
+                subtotal += itemTotal;
+                
+                itemsHTML += `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px;">
+                        <span style="color: #666;">${item.nama} × ${item.quantity}</span>
+                        <span style="font-weight: 700; color: #333;">${formatRupiah(itemTotal)}</span>
+                    </div>`;
+            });
+
+            orderItemsDiv.innerHTML = itemsHTML;
+            
+            const total = subtotal + SHIPPING_COST;
+            document.getElementById('subtotal').innerText = formatRupiah(subtotal);
+            document.getElementById('total').innerText = formatRupiah(total);
+        }
+
+        async function processOrder() {
+            // Validasi form
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const province = document.getElementById('province').value;
+            const city = document.getElementById('city').value.trim();
+            const postalCode = document.getElementById('postalCode').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (!fullName || !phone || !province || !city || !postalCode || !address) {
+                alert('Harap lengkapi semua data alamat pengiriman!');
+                return;
+            }
+
+            if (!paymentMethod) {
+                alert('Harap pilih metode pembayaran!');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Keranjang Anda kosong!');
+                return;
+            }
+
+            // Siapkan data pesanan
+            const subtotal = cart.reduce((sum, item) => sum + (item.harga * item.quantity), 0);
+            const orderData = {
+                fullName,
+                phone,
+                province,
+                city,
+                postalCode,
+                address,
+                paymentMethod,
+                items: cart,
+                subtotal: subtotal,
+                shippingCost: SHIPPING_COST,
+                totalAmount: subtotal + SHIPPING_COST
+            };
+
+            try {
+                // Kirim data pesanan ke server
+                const res = await fetch('/api/orders/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData),
+                    credentials: 'include'
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    // Kosongkan keranjang
+                    localStorage.removeItem('cart');
+                    
+                    // Tampilkan pesan sukses
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+                    
+                    // Redirect ke halaman produk setelah 3 detik
+                    setTimeout(() => {
+                        window.location.href = 'products.html';
+                    }, 3000);
+                } else {
+                    console.error('Order creation failed:', data);
+                    alert('Error: ' + (data.message || 'Gagal membuat pesanan'));
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Terjadi kesalahan: ' + error.message);
+                console.error('Order error:', error);
+            }
+        }
+
+        loadOrderSummary();
+    </script>
+</body>
+</html>
